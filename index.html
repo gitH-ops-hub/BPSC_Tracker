@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="description" content="BPSC CCE Study Tracker - Personal preparation planner for BPSC Combined Competitive Exam">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BPSC Tracker">
+<link rel="manifest" href="manifest.json">
+<title>BPSC CCE Study Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f1a;
+  --bg2: #16162a;
+  --bg3: #1e1e35;
+  --bg4: #252540;
+  --accent: #6c63ff;
+  --accent2: #ff6584;
+  --accent3: #43e97b;
+  --accent4: #f7971e;
+  --text: #e8e8f0;
+  --text2: #9999bb;
+  --text3: #5555777;
+  --border: rgba(108,99,255,0.18);
+  --border2: rgba(255,255,255,0.07);
+  --card: #16162a;
+  --card2: #1e1e35;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --glow: 0 0 20px rgba(108,99,255,0.15);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,15,26,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;height:56px;gap:8px}
+.nav-brand{font-family:var(--font-head);font-weight:800;font-size:16px;color:var(--text);flex:1;display:flex;align-items:center;gap:8px}
+.nav-brand span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-pill{font-size:10px;background:var(--bg3);border:1px solid var(--border);padding:2px 8px;border-radius:20px;color:var(--text2);font-family:var(--font-body)}
+.nav-btn{background:none;border:1px solid var(--border);color:var(--text2);padding:6px 10px;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;font-family:var(--font-body);transition:all 0.2s}
+.nav-btn:hover{background:var(--bg3);color:var(--text)}
+.nav-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* SIDEBAR */
+.layout{display:flex;padding-top:56px;min-height:100vh}
+.sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border2);position:fixed;top:56px;bottom:0;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-section{padding:12px 10px 4px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);font-weight:600}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:var(--radius-sm);margin:1px 6px;cursor:pointer;color:var(--text2);font-size:13px;transition:all 0.15s;border:none;background:none;width:calc(100% - 12px);text-align:left}
+.sidebar-item:hover{background:var(--bg3);color:var(--text)}
+.sidebar-item.active{background:rgba(108,99,255,0.15);color:var(--accent);border-left:2px solid var(--accent)}
+.sidebar-item .icon{font-size:16px;width:20px;text-align:center}
+.sidebar-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600}
+.sidebar-person{margin:8px 10px;border-top:1px solid var(--border2);padding-top:10px}
+.person-switch{display:flex;gap:4px}
+.person-btn{flex:1;padding:6px 4px;font-size:11px;border-radius:var(--radius-sm);border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;font-family:var(--font-body);transition:all 0.2s;text-align:center}
+.person-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+
+/* MAIN */
+.main{margin-left:220px;flex:1;padding:24px;min-height:calc(100vh - 56px)}
+.page{display:none}.page.active{display:block}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:18px 20px;margin-bottom:14px}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{font-family:var(--font-head);font-weight:700;font-size:15px;color:var(--text)}
+.card-sub{font-size:12px;color:var(--text2)}
+
+/* DASHBOARD */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat{background:var(--card2);border:1px solid var(--border2);border-radius:var(--radius);padding:16px;position:relative;overflow:hidden}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat.s1::before{background:var(--accent)}
+.stat.s2::before{background:var(--accent2)}
+.stat.s3::before{background:var(--accent3)}
+.stat.s4::before{background:var(--accent4)}
+.stat-val{font-family:var(--font-head);font-size:28px;font-weight:800;margin-bottom:2px}
+.stat-lbl{font-size:11px;color:var(--text2)}
+.stat.s1 .stat-val{color:var(--accent)}
+.stat.s2 .stat-val{color:var(--accent2)}
+.stat.s3 .stat-val{color:var(--accent3)}
+.stat.s4 .stat-val{color:var(--accent4)}
+
+/* PROGRESS */
+.prog-wrap{margin-bottom:10px}
+.prog-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;color:var(--text2)}
+.prog-bar{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;transition:width 0.5s ease}
+
+/* WEEK PLAN */
+.phase-label{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);font-weight:600;padding:14px 0 6px;border-top:1px solid var(--border2);margin-top:6px}
+.phase-label:first-child{border-top:none;padding-top:0}
+.week-item{background:var(--card2);border:1px solid var(--border2);border-radius:var(--radius);margin-bottom:8px;overflow:hidden;transition:border-color 0.2s}
+.week-item.completed{border-color:rgba(67,233,123,0.3)}
+.week-item.in-progress{border-color:rgba(247,151,30,0.4)}
+.week-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
+.week-num-badge{background:var(--bg4);color:var(--text2);font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;min-width:64px;text-align:center;font-family:var(--font-head)}
+.week-title-text{flex:1;font-size:13px;font-weight:500;color:var(--text)}
+.week-status{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;transition:all 0.2s;flex-shrink:0}
+.week-status.done{background:var(--accent3);border-color:var(--accent3);color:#000}
+.week-status.wip{background:var(--accent4);border-color:var(--accent4);color:#000}
+.week-chevron{color:var(--text3);font-size:12px;transition:transform 0.2s;flex-shrink:0}
+.week-chevron.open{transform:rotate(180deg)}
+.week-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border2)}
+.week-body.open{display:block}
+.week-topics{margin-top:10px}
+.topic-row{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid var(--border2)}
+.topic-row:last-child{border-bottom:none}
+.topic-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border);background:none;cursor:pointer;flex-shrink:0;transition:all 0.2s;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px}
+.topic-check.done{background:var(--accent);border-color:var(--accent);color:#fff}
+.topic-check.revise{background:var(--accent4);border-color:var(--accent4);color:#000}
+.topic-text{flex:1;font-size:13px;color:var(--text2);line-height:1.5}
+.topic-text.done{text-decoration:line-through;color:var(--text3)}
+.topic-actions{display:flex;gap:4px;flex-shrink:0}
+.topic-btn{font-size:10px;padding:2px 7px;border-radius:5px;border:1px solid var(--border);background:none;color:var(--text3);cursor:pointer;font-family:var(--font-body);transition:all 0.15s}
+.topic-btn:hover{background:var(--bg4);color:var(--text)}
+.topic-btn.r{border-color:rgba(247,151,30,0.4);color:var(--accent4)}
+.topic-btn.r.active{background:var(--accent4);color:#000}
+.pyq-box{background:rgba(108,99,255,0.08);border:1px solid rgba(108,99,255,0.2);border-radius:var(--radius-sm);padding:8px 10px;font-size:12px;color:var(--text2);margin-top:8px;line-height:1.6}
+.pyq-box strong{color:var(--accent)}
+.tip-box{background:rgba(247,151,30,0.08);border:1px solid rgba(247,151,30,0.2);border-radius:var(--radius-sm);padding:8px 10px;font-size:12px;color:#e0b87a;margin-top:8px;line-height:1.6}
+.books-box{background:rgba(67,233,123,0.05);border:1px solid rgba(67,233,123,0.15);border-radius:var(--radius-sm);padding:8px 10px;font-size:12px;color:var(--text2);margin-top:8px;line-height:1.8}
+.books-box strong{color:var(--accent3)}
+
+/* NOTES */
+.notes-area{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;resize:vertical;min-height:80px;line-height:1.6;outline:none}
+.notes-area:focus{border-color:var(--accent)}
+.notes-save-btn{margin-top:6px;padding:5px 14px;background:var(--accent);border:none;color:#fff;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;font-family:var(--font-body)}
+.note-saved{font-size:11px;color:var(--accent3);margin-top:4px;display:none}
+
+/* TAGS */
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.badge-h{background:rgba(255,101,132,0.15);color:var(--accent2)}
+.badge-m{background:rgba(247,151,30,0.12);color:var(--accent4)}
+.badge-l{background:rgba(67,233,123,0.12);color:var(--accent3)}
+.badge-i{background:rgba(108,99,255,0.12);color:var(--accent)}
+
+/* DAILY LOG */
+.today-banner{background:linear-gradient(135deg,rgba(108,99,255,0.15),rgba(255,101,132,0.1));border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.today-date{font-family:var(--font-head);font-size:22px;font-weight:800;color:var(--text)}
+.today-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.today-streak{margin-left:auto;text-align:center}
+.streak-num{font-family:var(--font-head);font-size:26px;font-weight:800;color:var(--accent4)}
+.streak-lbl{font-size:10px;color:var(--text2)}
+.daily-list{list-style:none}
+.daily-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border2)}
+.daily-item:last-child{border-bottom:none}
+.daily-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);background:none;cursor:pointer;flex-shrink:0;transition:all 0.2s;font-size:12px;display:flex;align-items:center;justify-content:center}
+.daily-check.done{background:var(--accent3);border-color:var(--accent3);color:#000}
+.daily-label{flex:1;font-size:13px;color:var(--text2)}
+.daily-label.done{text-decoration:line-through;color:var(--text3)}
+.daily-time{font-size:11px;color:var(--text3);background:var(--bg3);padding:2px 7px;border-radius:5px}
+
+/* REVISION QUEUE */
+.rev-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card2);border:1px solid var(--border2);border-radius:var(--radius-sm);margin-bottom:6px}
+.rev-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.rev-text{flex:1;font-size:13px;color:var(--text2)}
+.rev-week{font-size:11px;color:var(--text3);background:var(--bg4);padding:2px 7px;border-radius:5px}
+.rev-btn{font-size:11px;padding:3px 10px;border:1px solid var(--border);background:none;color:var(--accent3);border-color:rgba(67,233,123,0.3);border-radius:var(--radius-sm);cursor:pointer;font-family:var(--font-body)}
+
+/* RESOURCES */
+.res-card{background:var(--card2);border:1px solid var(--border2);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px}
+.res-subject{font-family:var(--font-head);font-weight:700;font-size:13px;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.res-list{font-size:12px;color:var(--text2);line-height:2}
+.res-link{color:var(--accent);text-decoration:none;font-size:12px}
+.res-link:hover{text-decoration:underline}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;width:90%;max-width:480px;max-height:80vh;overflow-y:auto}
+.modal-title{font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:16px;color:var(--text)}
+.modal-close{float:right;background:none;border:none;color:var(--text2);cursor:pointer;font-size:18px;line-height:1}
+.form-group{margin-bottom:12px}
+.form-label{font-size:12px;color:var(--text2);margin-bottom:4px;display:block}
+.form-input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;outline:none}
+.form-input:focus{border-color:var(--accent)}
+.form-select{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;outline:none}
+.btn{padding:8px 18px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;cursor:pointer;border:none;transition:all 0.2s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{opacity:0.9}
+.btn-danger{background:rgba(255,101,132,0.15);color:var(--accent2);border:1px solid rgba(255,101,132,0.3)}
+.btn-secondary{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--accent);color:var(--text);padding:10px 18px;border-radius:var(--radius-sm);font-size:13px;z-index:300;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* SETUP */
+.setup-overlay{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:24px}
+.setup-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;width:100%;max-width:420px;text-align:center}
+.setup-title{font-family:var(--font-head);font-size:24px;font-weight:800;color:var(--text);margin-bottom:6px}
+.setup-sub{font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.6}
+.setup-options{display:flex;gap:10px;margin-bottom:20px}
+.setup-opt{flex:1;padding:16px 10px;border-radius:var(--radius);border:2px solid var(--border2);background:var(--card2);cursor:pointer;transition:all 0.2s;text-align:center}
+.setup-opt:hover,.setup-opt.sel{border-color:var(--accent);background:rgba(108,99,255,0.1)}
+.setup-opt-icon{font-size:28px;margin-bottom:8px}
+.setup-opt-title{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.setup-opt-sub{font-size:11px;color:var(--text2);line-height:1.4}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{width:100%;top:auto;bottom:0;height:56px;flex-direction:row;border-right:none;border-top:1px solid var(--border2);overflow:hidden;justify-content:space-around;padding:0}
+  .sidebar-section,.sidebar-badge,.sidebar-person{display:none}
+  .main{margin-left:0;padding:12px;padding-bottom:70px}
+  .sidebar-item{flex-direction:column;gap:3px;padding:8px 12px;font-size:9px;margin:0;width:auto;border-radius:0}
+  .sidebar-item.active{border-left:none;border-top:2px solid var(--accent)}
+  .sidebar-item .icon{font-size:18px}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .layout{flex-direction:column}
+  .nav-btn:not(.active){display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- SETUP SCREEN -->
+<div class="setup-overlay" id="setupOverlay">
+  <div class="setup-card">
+    <div style="font-size:36px;margin-bottom:12px">📚</div>
+    <div class="setup-title">BPSC CCE Tracker</div>
+    <div class="setup-sub">Your personal study companion for Bihar Civil Services preparation. Let's set up your profile first.</div>
+    <div style="margin-bottom:16px;text-align:left">
+      <div class="form-group">
+        <label class="form-label">Your name</label>
+        <input class="form-input" id="setupName" placeholder="Enter your name" />
+      </div>
+      <div class="form-label" style="margin-bottom:8px">Select your profile</div>
+    </div>
+    <div class="setup-options">
+      <div class="setup-opt sel" id="opt1" onclick="selectPerson(1)">
+        <div class="setup-opt-icon">🌿</div>
+        <div class="setup-opt-title">Person 1</div>
+        <div class="setup-opt-sub">B.Sc Botany + M.A. Sociology + PhD<br>Optional: Sociology</div>
+      </div>
+      <div class="setup-opt" id="opt2" onclick="selectPerson(2)">
+        <div class="setup-opt-icon">💻</div>
+        <div class="setup-opt-title">Person 2</div>
+        <div class="setup-opt-sub">B.Tech CS Engineering<br>Optional: Computer Science</div>
+      </div>
+    </div>
+    <div class="form-group" style="text-align:left">
+      <label class="form-label">Target exam (e.g. 72nd BPSC CCE)</label>
+      <input class="form-input" id="setupTarget" placeholder="72nd BPSC CCE 2026" />
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:12px" onclick="completeSetup()">Start My Preparation →</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <span>BPSC</span> Tracker
+    <div class="nav-pill" id="navPerson">—</div>
+  </div>
+  <button class="nav-btn" onclick="exportData()">⬇ Export</button>
+  <label class="nav-btn" style="cursor:pointer">⬆ Import<input type="file" accept=".json" onchange="importData(event)" style="display:none"></label>
+  <button class="nav-btn" onclick="resetConfirm()">⚙ Reset</button>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">Menu</div>
+    <button class="sidebar-item active" onclick="showPage('dashboard',this)">
+      <span class="icon">📊</span> Dashboard
+    </button>
+    <button class="sidebar-item" onclick="showPage('today',this)">
+      <span class="icon">☀️</span> Today
+      <span class="sidebar-badge" id="todayBadge">0</span>
+    </button>
+    <button class="sidebar-item" onclick="showPage('weekplan',this)">
+      <span class="icon">📅</span> Week Plan
+    </button>
+    <button class="sidebar-item" onclick="showPage('revision',this)">
+      <span class="icon">🔁</span> Revision
+      <span class="sidebar-badge" id="revBadge" style="background:var(--accent4)">0</span>
+    </button>
+    <button class="sidebar-item" onclick="showPage('notes',this)">
+      <span class="icon">📝</span> Notes
+    </button>
+    <button class="sidebar-item" onclick="showPage('resources',this)">
+      <span class="icon">📚</span> Resources
+    </button>
+    <button class="sidebar-item" onclick="showPage('pyq',this)">
+      <span class="icon">📋</span> PYQ Analysis
+    </button>
+    <div class="sidebar-person">
+      <div class="form-label" style="font-size:10px;margin-bottom:6px;color:var(--text3)">Switch Profile</div>
+      <div class="person-switch">
+        <button class="person-btn" id="pb1" onclick="switchPerson(1)">P1 🌿</button>
+        <button class="person-btn" id="pb2" onclick="switchPerson(2)">P2 💻</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div style="margin-bottom:20px">
+        <div style="font-family:var(--font-head);font-size:22px;font-weight:800;color:var(--text)" id="dashGreet">Good morning!</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:4px" id="dashSub">Let's check your preparation progress.</div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat s1"><div class="stat-val" id="statTotal">0%</div><div class="stat-lbl">Overall progress</div></div>
+        <div class="stat s2"><div class="stat-val" id="statDone">0</div><div class="stat-lbl">Topics completed</div></div>
+        <div class="stat s3"><div class="stat-val" id="statStreak">0</div><div class="stat-lbl">Day streak 🔥</div></div>
+        <div class="stat s4"><div class="stat-val" id="statRevise">0</div><div class="stat-lbl">Pending revision</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Subject-wise progress</div></div>
+        <div id="subjectProgress"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="card">
+          <div class="card-head"><div class="card-title">This week focus</div></div>
+          <div id="thisWeekFocus" style="font-size:13px;color:var(--text2);line-height:2"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Quick notes</div></div>
+          <textarea class="notes-area" id="quickNote" placeholder="Jot something down..." style="min-height:100px"></textarea>
+          <button class="notes-save-btn" onclick="saveQuickNote()">Save</button>
+          <div class="note-saved" id="quickNoteSaved">✓ Saved!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TODAY -->
+    <div class="page" id="page-today">
+      <div class="today-banner">
+        <div>
+          <div class="today-date" id="todayDateDisplay">—</div>
+          <div class="today-sub" id="todayWeekInfo">Loading your schedule...</div>
+        </div>
+        <div class="today-streak">
+          <div class="streak-num" id="streakDisplay">0</div>
+          <div class="streak-lbl">day streak 🔥</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Today's tasks</div>
+          <button class="btn btn-secondary" style="font-size:12px;padding:5px 12px" onclick="openAddTask()">+ Add task</button>
+        </div>
+        <div id="todayTaskList"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Daily study log</div></div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Log hours spent on each subject today</div>
+        <div id="studyLogGrid"></div>
+        <button class="btn btn-primary" style="margin-top:10px;font-size:12px;padding:6px 16px" onclick="saveStudyLog()">Save log</button>
+      </div>
+    </div>
+
+    <!-- WEEK PLAN -->
+    <div class="page" id="page-weekplan">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div>
+          <div style="font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--text)">Week-by-week plan</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px" id="weekplanPersonLabel">—</div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-secondary" style="font-size:12px;padding:5px 12px" onclick="expandAll()">Expand all</button>
+          <button class="btn btn-secondary" style="font-size:12px;padding:5px 12px" onclick="collapseAll()">Collapse</button>
+        </div>
+      </div>
+      <div id="weekPlanContainer"></div>
+    </div>
+
+    <!-- REVISION -->
+    <div class="page" id="page-revision">
+      <div style="margin-bottom:16px">
+        <div style="font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--text)">Revision queue</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:2px">Topics marked for revision. Clear them as you go.</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Pending revision</div>
+          <span class="badge badge-m" id="revCountBadge">0 topics</span>
+        </div>
+        <div id="revisionList"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Completed revisions</div></div>
+        <div id="revisionDoneList" style="font-size:13px;color:var(--text3)">None yet.</div>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="page" id="page-notes">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div style="font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--text)">My notes</div>
+        <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="openNoteModal()">+ New note</button>
+      </div>
+      <div id="notesList"></div>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="page" id="page-resources">
+      <div style="font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--text);margin-bottom:16px">Books & resources</div>
+      <div id="resourcesContainer"></div>
+    </div>
+
+    <!-- PYQ ANALYSIS -->
+    <div class="page" id="page-pyq">
+      <div style="font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--text);margin-bottom:16px">PYQ topic analysis</div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Prelims weightage (66th–71st BPSC CCE)</div></div>
+        <div id="pyqBars"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Most repeated topics</div></div>
+        <div id="repeatedTopics" style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:13px;color:var(--text2);line-height:2.2"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Exam difficulty history</div></div>
+        <div id="diffHistory"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">PYQ download sources</div></div>
+        <div style="font-size:13px;color:var(--text2);line-height:2.4">
+          <div>📥 <a href="https://www.pw.live/state-psc/exams/bpsc-previous-year-question-paper" target="_blank" class="res-link">Physics Wallah (pw.live)</a> — 71st to 65th, Sets A/B/C/D + last 10 yrs PDF</div>
+          <div>📥 <a href="https://www.drishtiias.com/free-downloads/state-pcs-previous-years-papers/bihar" target="_blank" class="res-link">Drishti IAS</a> — 66th–71st Prelims + Mains (GS I, GS II, Essay, Hindi)</div>
+          <div>📥 <a href="https://testbook.com/bpsc-exam/previous-year-papers" target="_blank" class="res-link">Testbook</a> — 199+ papers with solutions</div>
+          <div>📥 <a href="https://examdhara.com/blog/bpsc-previous-year-papers/" target="_blank" class="res-link">ExamDhara</a> — 38th to 71st CCE, bilingual</div>
+          <div>📥 <a href="https://bpscpathshala.com/bpsc-preparation/bpsc-previous-year-question-papers/" target="_blank" class="res-link">BPSC Pathshala</a> — Subject-wise + optional papers</div>
+          <div>📥 <a href="https://bpsc.bih.nic.in" target="_blank" class="res-link">Official BPSC website</a> — Primary source, notifications & results</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="taskModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('taskModal')">✕</button>
+    <div class="modal-title">Add today's task</div>
+    <div class="form-group">
+      <label class="form-label">Task description</label>
+      <input class="form-input" id="taskInput" placeholder="e.g. Read NCERT History Ch 6–8" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Subject</label>
+      <select class="form-select" id="taskSubject">
+        <option>History</option><option>Geography</option><option>Polity</option>
+        <option>Economy</option><option>General Science</option><option>Bihar Special</option>
+        <option>Current Affairs</option><option>Optional Subject</option><option>Mains Writing</option><option>Mock Test</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Estimated time</label>
+      <select class="form-select" id="taskTime">
+        <option>30 min</option><option>1 hr</option><option>1.5 hrs</option><option>2 hrs</option><option>3 hrs</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="addTask()">Add task</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="noteModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('noteModal')">✕</button>
+    <div class="modal-title" id="noteModalTitle">New note</div>
+    <div class="form-group">
+      <label class="form-label">Title</label>
+      <input class="form-input" id="noteTitle" placeholder="Note title..." />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Subject / Week</label>
+      <select class="form-select" id="noteSubject">
+        <option>History</option><option>Geography</option><option>Polity</option>
+        <option>Economy</option><option>General Science</option><option>Bihar Special</option>
+        <option>Current Affairs</option><option>Optional Subject</option><option>General</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Note content</label>
+      <textarea class="notes-area" id="noteContent" style="min-height:120px" placeholder="Write your note here..."></textarea>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="saveNote()">Save note</button>
+      <button class="btn btn-danger" id="deleteNoteBtn" onclick="deleteNote()" style="display:none">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="resetModal">
+  <div class="modal">
+    <div class="modal-title">Reset all data?</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6">This will delete all your progress, notes, and settings. Export your data first if you want a backup.</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-danger" style="flex:1" onclick="resetAll()">Yes, reset everything</button>
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('resetModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const WEEK_DATA = {
+  1: [ // Person 1
+    {phase:'Phase 1 · Foundation (Weeks 1–6)',weeks:[
+      {id:'w1',num:'Week 1–2',title:'Syllabus mapping + NCERT History (Ancient & Medieval)',subject:'History',
+        topics:['Download 72nd BPSC syllabus & exam calendar from bpsc.bih.nic.in','Download last 5 years Prelims PYQs from pw.live & drishtiias.com','NCERT History 6, 7 — Ancient India (Harappan, Vedic, Maurya periods)','NCERT History 8 — Medieval India overview','Bihar focus: Mauryan Empire, Pataliputra capital, Nalanda, Vikramshila','Make short notes: Bihar in Ancient & Medieval period (PYQ gold)','Solve 20 History PYQs from previous BPSC papers (use timer)'],
+        pyq:'Nalanda University, Vikramshila, Pataliputra, and Maurya-era Bihar asked in almost every edition. Prepare 5–6 crisp facts per topic.',
+        tip:'',books:'NCERT History 6, 7, 8 · Bihar Ek Parichay (Chapter on ancient Bihar)'},
+      {id:'w2',num:'Week 3–4',title:'Modern History + Bihar\'s freedom struggle',subject:'History',
+        topics:['NCERT History 10 (Modern India) — read fully','Spectrum Modern History Ch 1–10 (1857 to Quit India Movement)','Bihar focus: Champaran Satyagraha 1917, Bakasht Movement, JP Movement','Bihar leaders: Rajendra Prasad, Jai Prakash Narayan, Veer Kunwar Singh','NCERT Sociology 11 — begin as optional subject foundation (Ch 1–3)','Solve 30 History PYQs from 67th–71st papers with timer'],
+        pyq:'Champaran Satyagraha 1917 and Bihar\'s role in Quit India 1942 appear in nearly every BPSC paper. These are easy guaranteed marks.',
+        tip:'Person 1 advantage: M.A. Sociology helps with understanding social reform movements alongside freedom struggle.',books:'Spectrum Modern History · NCERT History 10 · Bipin Chandra — India\'s Struggle for Independence'},
+      {id:'w3',num:'Week 5–6',title:'Geography (Physical India) + Bihar geography',subject:'Geography',
+        topics:['NCERT Geography 6 & 9 — Physical features of India','G.C. Leong — Ch 1–8 (physical geography basics: landforms, climate)','Bihar rivers: Ganga, Gandak, Kosi, Son, Bagmati — origin, tributaries, floods','Bihar districts map study — all 38 districts, divisions, borders with states','Climate zones, agriculture, minerals of Bihar','NCERT Sociology 11 — continue Ch 4–6 (Indian society, rural society)','Solve 25 Geography PYQs from previous BPSC papers'],
+        pyq:'Rivers of Bihar (Kosi & Gandak especially), geographic divisions, and Triveni Canal appear in most editions. Bihar district borders with other states are asked frequently.',
+        tip:'',books:'NCERT Geography 6, 9, 11 · G.C. Leong — Certificate Physical Geography · Bihar geography notes (available at Patna bookshops)'},
+    ]},
+    {phase:'Phase 2 · Core subjects (Weeks 7–20)',weeks:[
+      {id:'w4',num:'Week 7–8',title:'Indian Polity + Bihar Panchayati Raj',subject:'Polity',
+        topics:['M. Laxmikanth — Ch 1–10 (Constitution basics, Preamble, FRs, DPSP)','42nd, 44th, 73rd, 74th, 86th amendments — all PYQ regulars','Article 356 (President\'s Rule) — very relevant for Bihar context','Bihar Panchayati Raj Act — 3-tier system, Gram Sabha powers, women reservation','NCERT Sociology 12 — Social institutions: family, kinship, marriage','Solve 30 Polity PYQs from 66th–71st BPSC papers'],
+        pyq:'Fundamental Rights (Art 12–35), 73rd Amendment (Panchayati Raj), and DPSP questions appear in every single BPSC Prelims paper. Do not skip.',
+        tip:'Person 1 advantage: Sociology background gives deep understanding of social justice provisions in the Constitution, which comes in handy for Polity answers.',books:'M. Laxmikanth — Indian Polity · D.D. Basu — Introduction to the Constitution · Bihar Panchayati Raj Act notes'},
+      {id:'w5',num:'Week 9–10',title:'Indian Economy + Bihar economy',subject:'Economy',
+        topics:['NCERT Economics 11 (Macro) — GDP, inflation, fiscal policy basics','NCERT Economics 12 — Money, banking, balance of payments','Ramesh Singh — Ch 1–6 (economic planning, poverty, agriculture)','Bihar economic survey: major sectors, GSDP, agriculture, industry data','Key central schemes in Bihar: PM Kisan, MGNREGA, Ayushman Bharat','NCERT Sociology 12 — Social change, globalization chapters','Solve 25 Economy PYQs + attempt 1 full Prelims mock (timed 2 hrs)'],
+        pyq:'Economy questions focus on basics: inflation, GDP, fiscal deficit, agricultural policy, and Bihar-specific economic data. Budget highlights are asked every year.',
+        tip:'Person 1 advantage: Sociology background helps with socio-economic questions on poverty, caste discrimination, and social change in economy — these appear in both Prelims and Mains GS II.',books:'NCERT Economics 11–12 · Ramesh Singh — Indian Economy · Bihar Economic Survey (annual, govt website)'},
+      {id:'w6',num:'Week 11–13',title:'General Science (Biology focus) + Environment',subject:'General Science',
+        topics:['NCERT Science 8 — Cell structure, reproduction, microorganisms','NCERT Science 9 — Biological diversity, atoms, force & motion','NCERT Science 10 — Life processes, heredity, our environment','Lucent\'s General Science — Physics & Chemistry quick revision','Botany advantage: plant biology, photosynthesis, ecology, genetics — revise thoroughly','Environment: NCERT 12 Biology ecology chapters + climate change basics','Solve 35 Science PYQs — note which chapters dominate'],
+        pyq:'General Science = highest weightage (25–30 Qs). Biology questions dominate. Person 1\'s Botany degree is a direct advantage — photosynthesis, cell division, plant diseases, ecology are asked directly.',
+        tip:'Person 1 Botany advantage: You likely know plant biology at a graduate level. Most BPSC science questions on plants are basic — use this to score full marks in biology section quickly.',books:'NCERT Science 8, 9, 10 · Lucent\'s General Science · NCERT Biology 11–12 (for ecology chapters)'},
+      {id:'w7',num:'Week 14–16',title:'Bihar special deep dive + current affairs system',subject:'Bihar Special',
+        topics:['Bihar Ek Parichay — complete reading (all chapters: art, culture, history, geography, economy)','Folk arts: Madhubani painting, Sujini embroidery, Sikki craft, Manjusha art, Pattachitra','Fairs & festivals: Chhath Puja, Sonepur Mela, Rajgir Mahotsav, Pitrapaksha Mela','Bihar government schemes: Mukhyamantri Cycle Yojana, Har Ghar Nal Jal, Mukhyamantri Medhavriti','Set up daily current affairs routine: 45 min/day (Prabhat Khabar + Drishti/Vision IAS)','Bihar current affairs: budget, schemes, elections, appointments, sports achievements','Attempt 2 full Prelims mocks this fortnight — analyze weak areas'],
+        pyq:'Bihar art & culture (Madhubani, Sujini, folk music, Chhath Puja significance) appear in 4 out of 5 recent editions. Easy marks that most outsiders miss.',
+        tip:'',books:'Bihar Ek Parichay · Bihar Darshan · Prabhat Khabar newspaper (Bihar current affairs) · Drishti Current Affairs magazine'},
+      {id:'w8',num:'Week 17–20',title:'Sociology optional — complete exam-oriented preparation',subject:'Optional Subject',
+        topics:['C.N. Shankar Rao — complete all chapters systematically','Anthony Giddens — Sociology (social institutions, stratification, modernity chapters)','Indian sociology: G.S. Ghurye, M.N. Srinivas — Sanskritization, Westernization','Tribal society: scheduled tribes, forest rights, tribal movements in Bihar','Social stratification: caste system, class, gender — Bihar angle always','Urbanization & social change in Bihar — connects to GS II governance also','Solve all BPSC Sociology optional PYQs from 65th–70th editions','Write 10 practice answers (150–200 words) from past Sociology optional papers'],
+        pyq:'Sociology optional is qualifying in nature but must be passed. With M.A. Sociology, focus on exam structuring (intro-body-conclusion) and keyword usage rather than new content.',
+        tip:'Person 1 key advantage: M.A. Sociology means this optional needs 60% less preparation time than average aspirants. Use saved time to strengthen Bihar GK and current affairs.',books:'C.N. Shankar Rao — Sociology · Anthony Giddens — Sociology · NCERT Sociology 11–12 · BPSC Sociology optional PYQs'},
+    ]},
+    {phase:'Phase 3 · Mains prep + answer writing (Weeks 21–36)',weeks:[
+      {id:'w9',num:'Week 21–24',title:'GS Paper I Mains — History & Geography answers',subject:'Mains Writing',
+        topics:['Solve 69th, 70th, 71st BPSC Mains GS I PYQs — identify repeated question types','Write 3 answers/day: 2 History, 1 Geography (150–200 words each)','Practice Bihar angle in every answer: "Bihar\'s role in X", "Bihar\'s geography of X"','Standard answer format: Introduction → Body (3 main points) → Bihar angle → Conclusion','Use Sociology lens for social reform history answers — Phule, Ambedkar, caste reform','Continue 3 Prelims mocks/week — target 105+ score','Revise all History and Geography short notes from Phase 1'],
+        pyq:'Mains PYQ trend: History & Polity dominate GS Paper I. Bihar-specific questions score the most. Answers without Bihar context lose 20–30% of potential marks.',
+        tip:'Person 1 advantage: Sociology training means you can write structured, analytical answers naturally — a skill most BPSC aspirants struggle with.',books:'BPSC Mains GS I PYQs (drishtiias.com) · Topper answer copies from BPSC Pathshala'},
+      {id:'w10',num:'Week 25–28',title:'GS Paper II Mains — Polity, Bihar governance, General Hindi',subject:'Mains Writing',
+        topics:['Solve 68th–71st BPSC Mains GS II PYQs — governance + Bihar dev + science & tech','Write 3 answers/day: Polity, Bihar development, Science & Technology','Apply Sociology lens to governance: inequality, caste in administration, social welfare','Learn Bihar\'s flagship schemes in depth: Har Ghar Bijli, Jal-Jeevan Mission Bihar, CM schemes','General Hindi practice: write 2 essays (600 words) per week on social topics','General Hindi: grammar revision — idioms (muhavare), comprehension, correction','Attempt 1 full Mains mock paper (GS I + GS II, 3 hrs each)'],
+        pyq:'GS II in Mains tests Bihar governance knowledge deeply. Candidates who can cite specific Bihar scheme data and outcomes score significantly higher.',
+        tip:'',books:'BPSC Mains GS II PYQs · Bihar government official reports · Samanya Hindi by Hardev Bahri (for Hindi paper)'},
+      {id:'w11',num:'Week 29–36',title:'Full revision + intensive mocks + current affairs consolidation',subject:'Mock Test',
+        topics:['Revise all subjects systematically — 1 subject per 3 days rotation','Solve 4–5 full Prelims mocks per week (timed 2 hrs, negative marking active)','Revise last 6 months current affairs — Bihar events get highest priority','Attempt 3 full Mains mock papers — analyze and fix weak areas','Sociology optional — complete final revision of all chapters','Interview preparation: read Bihar-specific governance & development news in depth','Target: consistently scoring 110+ in Prelims mocks before actual exam date'],
+        pyq:'In the final phase, prioritize Bihar Special, Current Affairs, and General Science — the three highest-weightage sections in Prelims.',
+        tip:'',books:'All PYQ sets + mock test series from Testbook, BPSC Wallah, or Drishti IAS'},
+    ]},
+  ],
+  2: [ // Person 2
+    {phase:'Phase 1 · Foundation (Weeks 1–6)',weeks:[
+      {id:'w1',num:'Week 1–2',title:'Syllabus orientation + NCERT History foundation',subject:'History',
+        topics:['Download 72nd BPSC syllabus + exam calendar + last 5 years PYQs','NCERT History 6, 7, 8 — Ancient & Medieval India (read cover to cover)','Bihar angle: Mauryan Empire & Pataliputra, Gupta Empire, Nalanda, Vikramshila','Simultaneously: CS optional — Data Structures revision (Arrays, Linked Lists, Stacks, Queues)','Set up daily current affairs routine (30 min) from Day 1 — Bihar news priority','Solve 20 History PYQs — get a feel for question type and difficulty level'],
+        pyq:'Bihar\'s ancient history (Mauryan Empire, Nalanda University, Vikramshila) is asked in almost every BPSC paper. These are factual and easy if prepared.',
+        tip:'Person 2 reality check: History, Polity, and Geography are mostly new territory. Allocate 60% study time to GS subjects and 40% to optional + science. Don\'t let CS optional consume GS time.',books:'NCERT History 6, 7, 8 · Bihar Ek Parichay (ancient Bihar chapter)'},
+      {id:'w2',num:'Week 3–4',title:'Modern History + Bihar freedom struggle',subject:'History',
+        topics:['Spectrum Modern History — Ch 1–15 complete (focus on events, dates, leaders)','Bihar freedom fighters: Champaran 1917, Bakasht Movement, JP Movement, Birsa Munda','Create crisp timeline notes — use CS mindset: flowcharts and structured lists work great','Key national movements: 1857 revolt, Swadeshi, Non-Cooperation, Civil Disobedience, Quit India','CS optional — Algorithms (Sorting: Merge/Quick/Heap, Searching, Complexity O notation)','Solve 30 History PYQs from 67th–71st — note which sub-topics repeat most'],
+        pyq:'History contributes 12–18 questions in Prelims and dominates Mains GS I. Factual recall is key. Person 2 should not underestimate this section.',
+        tip:'CS mindset tip: Create data-structure-like note cards for historical events — Event → Date → Place → Leader → Bihar connection. This systematic approach suits engineering thinking.',books:'Spectrum Modern History · NCERT History 10 · Bipin Chandra — India\'s Struggle for Independence'},
+      {id:'w3',num:'Week 5–6',title:'Geography (Physical + Bihar) + first Prelims mock',subject:'Geography',
+        topics:['NCERT Geography 9, 11 — Physical India: climate, rivers, agriculture, natural resources','Bihar geography: 38 districts map, major rivers, Gangetic plains, flood-prone zones (Kosi)','G.C. Leong — atmosphere, hydrosphere, and landforms chapters (selected)','Triveni Canal, Indo-Gangetic Plains, Bihar\'s agricultural zones — important for PYQs','CS optional — OS concepts (Processes, Scheduling algorithms, Memory Management)','Attempt 1 full Prelims mock (timed 2 hrs) — honestly assess your starting score level','Analyze mock results: identify top 3 weak areas and adjust next 2 weeks accordingly'],
+        pyq:'Geography asks about Bihar rivers, climate, agricultural patterns, and physical features. Map-based questions on Bihar districts and borders are common.',
+        tip:'CS advantage: Use geographic information system thinking — map features like data structures. Bihar geography can be learned systematically like a database.',books:'NCERT Geography 9, 11 · G.C. Leong — Certificate Physical Geography · Bihar geography district notes'},
+    ]},
+    {phase:'Phase 2 · Core subjects (Weeks 7–20)',weeks:[
+      {id:'w4',num:'Week 7–9',title:'Indian Polity (Laxmikanth) + Bihar governance',subject:'Polity',
+        topics:['M. Laxmikanth — Ch 1–25 complete (Constitution, FRs, DPSP, Parliament, Judiciary, Executive)','CS parallel: treat constitutional structure like system architecture — hierarchical mapping helps','73rd Amendment (Panchayati Raj), 74th (Municipalities) — know Bihar\'s implementation','Key articles: 12–35 (FRs), 36–51 (DPSP), 356 (President\'s Rule), 368 (Amendment procedure)','Bihar Panchayati Raj: 3-tier structure, Gram Panchayat, Panchayat Samiti, Zila Parishad','CS optional — DBMS (SQL queries, Normalization 1NF-3NF, ER Diagrams, Transactions)','Solve 35 Polity PYQs from 66th–71st — categorize by topic (FRs, Parliament, Judiciary)'],
+        pyq:'Polity is medium-high weightage (10–14 Qs Prelims). Constitutional amendments and Panchayati Raj dominate. Person 2\'s logical CS thinking aids elimination-based MCQ solving.',
+        tip:'CS advantage: Treat the Constitution like a hierarchical data structure. Articles → Chapter → Part maps well to a tree structure. This helps retention.',books:'M. Laxmikanth — Indian Polity · D.D. Basu — Introduction to the Constitution · Bihar Panchayati Raj notes'},
+      {id:'w5',num:'Week 10–12',title:'Economy + General Science + Science & Tech advantage',subject:'Economy',
+        topics:['Ramesh Singh — Indian Economy Ch 1–8 (planning, poverty, agriculture, banking, trade)','NCERT Economics 11–12: GDP, inflation, money supply, fiscal & monetary policy','Bihar economic survey — key sectors, GSDP growth, agriculture share, major industries','NCERT Science 8–10 — Biology (cells, heredity, ecosystems), Physics, Chemistry basics','Science & Tech (GS II Mains advantage): AI, IoT, Digital India, cybersecurity, semiconductors','CS optional — Computer Networks (OSI model, TCP/IP stack, Routing protocols, HTTP/HTTPS)','Attempt 2 full Prelims mocks — target 90+ score; analyze Bihar GK performance'],
+        pyq:'Economy: inflation, GDP, fiscal deficit, agricultural policy, budget highlights, Bihar economic data. General Science: 25–30 Qs — biology-heavy but CS-related tech questions in GS II Mains.',
+        tip:'Person 2 big advantage: Science & Technology in Mains GS II includes AI, digital payments, cybersecurity, space tech — areas where a CS engineer can write far superior answers than typical aspirants.',books:'Ramesh Singh — Indian Economy · NCERT Economics 11–12 · NCERT Science 8, 9, 10 · Lucent\'s General Science'},
+      {id:'w6',num:'Week 13–15',title:'Bihar special deep dive + current affairs system',subject:'Bihar Special',
+        topics:['Bihar Ek Parichay — complete reading (culture, history, geography, economy, governance)','Madhubani painting, Sujini embroidery, Sonepur Mela, Chhath Puja — must-know facts','Bihar IT & tech development: BharatNet, e-governance in Bihar, startup ecosystem, IT parks','Digital Bihar initiatives: CM Dashboard, e-District, Jan Seva Kendra — CS knowledge helps here','Current affairs: 45 min/day — Bihar events + national schemes + international relevance','CS optional — Software Engineering (SDLC models, UML diagrams, Testing: unit/integration)','Attempt 2 full Prelims mocks — track Bihar GK score improvement'],
+        pyq:'Bihar art & culture is consistently asked and most non-Bihar aspirants lose these marks. Straightforward factual questions — easy 5–8 marks if prepared. Bihar tech initiatives are relevant for CS-related answers.',
+        tip:'Person 2 unique edge: Bihar\'s digital governance initiatives can be analyzed with CS expertise. When discussing e-governance, digital payments, or technology in Bihar in Mains — write with technical depth.',books:'Bihar Ek Parichay · Prabhat Khabar (Bihar current affairs) · Bihar IT dept annual report'},
+      {id:'w7',num:'Week 16–20',title:'CS optional — complete exam-oriented preparation',subject:'Optional Subject',
+        topics:['Data Structures — complete revision: Trees, Graphs, Hashing, Heaps, Trie','Algorithms — Divide & Conquer, Dynamic Programming, Greedy algorithms, Graph algorithms (BFS/DFS)','Operating Systems — complete: deadlock detection & avoidance, synchronization, file systems, virtual memory','DBMS — complete: ACID properties, concurrency control, SQL advanced, normalization','Computer Networks — TCP/IP layers, congestion control, DNS, HTTP, network security basics','Programming concepts: OOP, recursion, complexity analysis — likely descriptive in Mains','Solve available BPSC CS optional PYQs — write 10 descriptive answers (250 words each)'],
+        pyq:'CS optional PYQs follow B.Tech final exam pattern. Focus on OS, DBMS, Networks, and Algorithms — these dominate BPSC CS optional papers based on available analysis.',
+        tip:'Person 2 massive advantage: CS optional requires almost zero new learning — it is structured revision of B.Tech curriculum. This frees up 8–10 hrs/week that can go into building GS and Bihar knowledge base.',books:'Standard B.Tech textbooks: Cormen (Algorithms) · Silberschatz (OS) · Korth (DBMS) · Forouzan (Networks) · BPSC CS optional PYQs'},
+    ]},
+    {phase:'Phase 3 · Mains prep + answer writing (Weeks 21–36)',weeks:[
+      {id:'w8',num:'Week 21–24',title:'GS Paper I Mains — History & Geography answer writing',subject:'Mains Writing',
+        topics:['Solve 68th–71st BPSC Mains GS I PYQs — identify repeated question themes','Write 3 answers/day: 2 History, 1 Geography (150–200 words strict word count)','Standard structure: Context → Key facts (3 points) → Bihar angle → Significance/Conclusion','Practice diagram-based geography answers: Bihar river basin map, agricultural zones','Use CS documentation skills — write structured answers with clear topic sentences','Continue Prelims mocks: 3 per week, target 105+ before moving to Phase 4','Revise all History and Geography short notes — focus on Bihar-specific sub-topics'],
+        pyq:'GS I in Mains is dominated by History and Geography. Bihar-specific angle in every answer adds significant marks. Examiners reward Bihar context explicitly.',
+        tip:'',books:'BPSC Mains GS I PYQs from drishtiias.com · Topper answer copies from BPSC Pathshala and Drishti'},
+      {id:'w9',num:'Week 25–28',title:'GS Paper II Mains — Polity, Science & Tech, Bihar governance',subject:'Mains Writing',
+        topics:['Solve 68th–71st BPSC Mains GS II PYQs — Science & Tech section suits Person 2 perfectly','Write 3 answers/day: Polity governance, Bihar development, Science & Technology','CS advantage in answers: AI in governance, cybersecurity, digital payments, India\'s space tech','Answer on digital Bihar: BharatNet, e-governance, fintech — write with technical precision','General Hindi: essay + grammar practice 3 times/week (essay: 600 words on social topics)','Attempt 1 full Mains mock (GS I + GS II on same day — 6 hrs total, simulate exam day)'],
+        pyq:'GS II Science & Technology section rewards depth of knowledge. Person 2 can write at expert level on IT topics where most aspirants write surface-level answers.',
+        tip:'Person 2 unique Mains advantage: When a GS II question asks "Discuss the role of AI in governance" or "Impact of cybersecurity on digital India" — you can write a genuinely expert answer. This is a major scoring opportunity.',books:'BPSC Mains GS II PYQs · Science Reporter magazine · Yojana (governance & development articles)'},
+      {id:'w10',num:'Week 29–36',title:'Final push — intensive revision, mocks, current affairs',subject:'Mock Test',
+        topics:['Revise all subjects — 1 subject per 3 days in systematic rotation','Solve 4–5 full Prelims mocks per week under strict timed conditions (negative marking)','Last 6 months Bihar + national current affairs — intensive revision with notes','Attempt 3 full Mains mock papers — analyze and target weak scoring areas','CS optional — 1-week final revision of all 5 core subjects','Interview preparation: read Bihar tech initiatives, Smart Cities, e-governance news deeply','Target: consistently scoring 110+ in Prelims mocks before actual exam'],
+        pyq:'Final phase: prioritize Bihar Special (18–22 Qs), General Science (25–30 Qs), Current Affairs (20–25 Qs) — the three highest-weightage sections in Prelims.',
+        tip:'',books:'All PYQ sets + mock test series from Testbook, BPSC Wallah, Drishti IAS'},
+    ]},
+  ]
+};
+
+const RESOURCES = {
+  1: [
+    {subject:'History', icon:'📜', books:['NCERT History 6–12 (must read, both ancient & modern)','Bipin Chandra — India\'s Struggle for Independence','Spectrum Modern History','Bihar ka Itihas (local publication, Patna bookshops)','Old NCERT by RS Sharma (Ancient India)'], links:[]},
+    {subject:'Geography', icon:'🗺️', books:['NCERT Geography 6–12 (all books, cover to cover)','G.C. Leong — Certificate Physical Geography','NCERT Fundamentals of Human Geography (11th)','Bihar Geography district-wise notes (available at BPSC coaching institutes)'], links:[]},
+    {subject:'Indian Polity', icon:'⚖️', books:['M. Laxmikanth — Indian Polity (must-have, full book)','D.D. Basu — Introduction to the Constitution of India','Bihar Panchayati Raj Act (notes format)'], links:[]},
+    {subject:'Economy', icon:'💰', books:['NCERT Economics 11–12 (Macro & Micro)','Ramesh Singh — Indian Economy','Bihar Economic Survey (annual, Bihar govt website)','Union Budget & Economic Survey highlights'], links:[]},
+    {subject:'General Science', icon:'🔬', books:['NCERT Science 8, 9, 10 (all three, full books)','Lucent\'s General Science (for quick facts)','NCERT Biology 11–12 (ecology chapters — Person 1 advantage)'], links:[]},
+    {subject:'Bihar Special', icon:'🏛️', books:['Bihar Ek Parichay (comprehensive, must-read)','Bihar Darshan (culture focus)','Prabhat Khabar newspaper (daily, Bihar news)','Drishti Current Affairs magazine (monthly)'], links:[]},
+    {subject:'Optional: Sociology', icon:'👥', books:['C.N. Shankar Rao — Sociology (complete)','Anthony Giddens — Sociology (selected chapters)','NCERT Sociology 11 & 12 (both books)','BPSC Sociology optional PYQs (from bpscpathshala.com)'], links:[]},
+    {subject:'Current Affairs', icon:'📰', books:['The Hindu / Dainik Jagran (daily newspaper)','Drishti Current Affairs (monthly magazine)','Vision IAS Monthly CA (good for national context)','Prabhat Khabar (Bihar current affairs — very important)'], links:['https://www.drishtiias.com','https://www.visionias.in']},
+  ],
+  2: [
+    {subject:'History', icon:'📜', books:['NCERT History 6–12 (all books, rigorous reading needed)','Spectrum Modern History (Ch 1–20, complete)','Bipin Chandra — India\'s Struggle for Independence','Bihar ka Itihas (local publication, Patna bookshops)'], links:[]},
+    {subject:'Geography', icon:'🗺️', books:['NCERT Geography 9, 11, 12 (focus on these three)','G.C. Leong — Certificate Physical Geography','Bihar Geography district-wise notes'], links:[]},
+    {subject:'Indian Polity', icon:'⚖️', books:['M. Laxmikanth — Indian Polity (full book, no shortcuts)','D.D. Basu — Introduction to the Constitution','Bihar Panchayati Raj Act notes'], links:[]},
+    {subject:'Economy', icon:'💰', books:['NCERT Economics 11–12 (Macro & Micro)','Ramesh Singh — Indian Economy','Bihar Economic Survey (annual)'], links:[]},
+    {subject:'General Science', icon:'🔬', books:['NCERT Science 8, 9, 10 (all three)','Lucent\'s General Science (for facts and quick revision)','Science Reporter magazine (science & tech news)'], links:[]},
+    {subject:'Bihar Special', icon:'🏛️', books:['Bihar Ek Parichay (complete, must-read)','Bihar govt IT department annual report','Prabhat Khabar newspaper (Bihar current affairs daily)','Drishti Current Affairs (monthly)'], links:[]},
+    {subject:'Optional: Computer Science', icon:'💻', books:['Cormen et al. — Introduction to Algorithms (CLRS)','Abraham Silberschatz — Operating System Concepts','Korth & Sudarshan — Database System Concepts','Forouzan — Data Communications and Networking','R.S. Salaria — Programming in C (if needed)'], links:[]},
+    {subject:'Current Affairs', icon:'📰', books:['The Hindu (daily, national focus)','Prabhat Khabar (daily, Bihar focus — essential)','Vision IAS or Drishti Monthly CA magazine','Science Reporter (for Science & Tech GS II)'], links:['https://www.drishtiias.com','https://www.visionias.in']},
+  ]
+};
+
+const PYQ_DATA = [
+  {label:'General Science',qs:'25–30',pct:20,color:'#ff6584'},
+  {label:'Current Affairs (National + Bihar)',qs:'20–25',pct:17,color:'#ff6584'},
+  {label:'Bihar Special',qs:'18–22',pct:15,color:'#ff6584'},
+  {label:'History (Ancient+Medieval+Modern)',qs:'12–18',pct:12,color:'#f7971e'},
+  {label:'Geography (India + World)',qs:'12–15',pct:10,color:'#f7971e'},
+  {label:'Indian Polity & Constitution',qs:'10–14',pct:9,color:'#f7971e'},
+  {label:'Indian Economy',qs:'8–12',pct:8,color:'#f7971e'},
+  {label:'Environment & Ecology',qs:'5–8',pct:5,color:'#43e97b'},
+  {label:'Maths & Mental Ability',qs:'5–8',pct:5,color:'#43e97b'},
+  {label:'Miscellaneous GK',qs:'3–5',pct:3,color:'#6c63ff'},
+];
+
+const REPEATED_TOPICS = [
+  'Champaran Satyagraha & Bihar\'s freedom role','Indian Constitution — articles & amendments',
+  'Nalanda / Vikramshila University (Bihar)','Maurya & Gupta period (ancient Bihar)',
+  'Rivers of Bihar — Kosi, Gandak, Son, Ganga','Agriculture & crops of Bihar',
+  'Quit India Movement 1942 — Bihar\'s role','Panchayati Raj — 73rd amendment details',
+  'National schemes — PM Kisan, Ayushman, etc.','Science in daily life (biology-heavy)',
+  'Indus Valley Civilisation facts','Economic Survey & Union Budget highlights',
+  'Art & culture — Madhubani, Sujini, Chhath','El Nino / climate / environment events',
+];
+
+const DIFF_HISTORY = [
+  {exam:'71st BPSC (Sep 2025)',diff:'Easy–Moderate',attempts:'115–125',notes:'Science & History dominant; Bihar GK easy section',col:'#43e97b'},
+  {exam:'70th BPSC (Dec 2024)',diff:'Moderate–Difficult',attempts:'95–110',notes:'Current Affairs & Polity tough; Bihar economy questions',col:'#f7971e'},
+  {exam:'69th BPSC (Sep 2023)',diff:'Moderate–Difficult',attempts:'87–95',notes:'Bakasht Movement, Vikramshila, El Nino, River Gandak asked',col:'#f7971e'},
+  {exam:'68th BPSC (Feb 2024)',diff:'Moderate',attempts:'100–112',notes:'Constitution amendments, Agriculture, Bihar schemes heavy',col:'#f7971e'},
+  {exam:'67th BPSC (May 2022)',diff:'Moderate',attempts:'95–108',notes:'National movements, Polity, General Science heavy',col:'#f7971e'},
+];
+
+const SUBJECTS = ['History','Geography','Polity','Economy','General Science','Bihar Special','Current Affairs','Optional Subject','Mains Writing','Mock Test'];
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  person: 1,
+  name: '',
+  target: '',
+  setupDone: false,
+  topicStatus: {},   // topicKey -> 'done' | 'revise' | ''
+  weekStatus: {},    // weekId -> 'done' | 'wip' | ''
+  notes: [],         // [{id,title,subject,content,date}]
+  quickNote: '',
+  tasks: {},         // dateStr -> [{id,text,subject,time,done}]
+  studyLog: {},      // dateStr -> {History:1, Geography:2, ...}
+  lastActiveDate: '',
+  streak: 0,
+  revisionDone: [],  // topicKeys cleared from revision
+};
+
+function saveState(){localStorage.setItem('bpsc_tracker_v2',JSON.stringify(state))}
+function loadState(){
+  const s=localStorage.getItem('bpsc_tracker_v2');
+  if(s){try{state=JSON.parse(s)}catch(e){}}
+}
+
+function topicKey(weekId,idx){return `p${state.person}_${weekId}_${idx}`}
+function allTopics(person){
+  const res=[];
+  WEEK_DATA[person].forEach(phase=>phase.weeks.forEach(w=>w.topics.forEach((_,i)=>res.push(topicKey(w.id,i)))));
+  return res;
+}
+
+// ============================================================
+// SETUP
+// ============================================================
+let setupPerson=1;
+function selectPerson(p){
+  setupPerson=p;
+  document.getElementById('opt1').classList.toggle('sel',p===1);
+  document.getElementById('opt2').classList.toggle('sel',p===2);
+}
+function completeSetup(){
+  const name=document.getElementById('setupName').value.trim();
+  const target=document.getElementById('setupTarget').value.trim()||'72nd BPSC CCE 2026';
+  if(!name){toast('Please enter your name');return}
+  state.name=name;state.target=target;state.person=setupPerson;state.setupDone=true;
+  saveState();
+  document.getElementById('setupOverlay').style.display='none';
+  initApp();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function initApp(){
+  updateNavPerson();
+  updatePersonButtons();
+  renderDashboard();
+  renderToday();
+  renderWeekPlan();
+  renderRevision();
+  renderNotes();
+  renderResources();
+  renderPYQ();
+  updateStreakAndDate();
+}
+
+function updateNavPerson(){
+  document.getElementById('navPerson').textContent=
+    state.name?(state.name+' · P'+(state.person===1?'1 🌿':'2 💻')):'—';
+}
+
+function updatePersonButtons(){
+  document.getElementById('pb1').classList.toggle('active',state.person===1);
+  document.getElementById('pb2').classList.toggle('active',state.person===2);
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard(){
+  const hour=new Date().getHours();
+  const greet=hour<12?'Good morning':'hour<17'?'Good afternoon':'Good evening';
+  document.getElementById('dashGreet').textContent=(hour<12?'Good morning':'hour<17'?'Good afternoon':'Good evening')+', '+state.name+'! 👋';
+  document.getElementById('dashSub').textContent='Preparing for: '+state.target+' · Profile: Person '+(state.person===1?'1 (Sociology optional)':'2 (CS optional)');
+
+  const total=allTopics(state.person);
+  const done=total.filter(k=>state.topicStatus[k]==='done').length;
+  const revise=total.filter(k=>state.topicStatus[k]==='revise').length;
+  const pct=total.length?Math.round(done/total.length*100):0;
+
+  document.getElementById('statTotal').textContent=pct+'%';
+  document.getElementById('statDone').textContent=done;
+  document.getElementById('statStreak').textContent=state.streak;
+  document.getElementById('statRevise').textContent=revise;
+
+  // subject progress
+  const subjectDiv=document.getElementById('subjectProgress');
+  subjectDiv.innerHTML='';
+  SUBJECTS.forEach(sub=>{
+    const subTopics=[];
+    WEEK_DATA[state.person].forEach(phase=>phase.weeks.forEach(w=>{
+      if(w.subject===sub){w.topics.forEach((_,i)=>subTopics.push(topicKey(w.id,i)))}
+    }));
+    if(!subTopics.length)return;
+    const d=subTopics.filter(k=>state.topicStatus[k]==='done').length;
+    const p=Math.round(d/subTopics.length*100);
+    const colors={'History':'#6c63ff','Geography':'#43e97b','Polity':'#ff6584','Economy':'#f7971e','General Science':'#54d2e0','Bihar Special':'#f9a825','Current Affairs':'#ab47bc','Optional Subject':'#26c6da','Mains Writing':'#66bb6a','Mock Test':'#ef5350'};
+    const c=colors[sub]||'#6c63ff';
+    subjectDiv.innerHTML+=`<div class="prog-wrap">
+      <div class="prog-label"><span>${sub}</span><span>${d}/${subTopics.length} (${p}%)</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${p}%;background:${c}"></div></div>
+    </div>`;
+  });
+
+  // this week
+  const currentWeekEl=document.getElementById('thisWeekFocus');
+  let currentWeek=null;
+  WEEK_DATA[state.person].forEach(phase=>phase.weeks.forEach(w=>{
+    if(!currentWeek&&state.weekStatus[w.id]!=='done')currentWeek=w;
+  }));
+  if(currentWeek){
+    currentWeekEl.innerHTML=`<div style="font-weight:500;color:var(--text);margin-bottom:4px">${currentWeek.num}</div>${currentWeek.title}<div style="margin-top:8px;font-size:12px;color:var(--accent)">Subject: ${currentWeek.subject}</div>`;
+  } else {
+    currentWeekEl.innerHTML='<span style="color:var(--accent3)">🎉 All weeks completed!</span>';
+  }
+
+  document.getElementById('quickNote').value=state.quickNote||'';
+  updateRevBadges();
+}
+
+function saveQuickNote(){
+  state.quickNote=document.getElementById('quickNote').value;
+  saveState();
+  const el=document.getElementById('quickNoteSaved');
+  el.style.display='block';setTimeout(()=>el.style.display='none',1800);
+}
+
+// ============================================================
+// TODAY
+// ============================================================
+function updateStreakAndDate(){
+  const today=new Date().toDateString();
+  const display=document.getElementById('todayDateDisplay');
+  const weekInfo=document.getElementById('todayWeekInfo');
+  const streakEl=document.getElementById('streakDisplay');
+
+  if(display)display.textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  // streak logic
+  if(state.lastActiveDate!==today){
+    const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+    if(state.lastActiveDate===yesterday.toDateString()){state.streak=(state.streak||0)+1}
+    else if(state.lastActiveDate!==today){state.streak=1}
+    state.lastActiveDate=today;saveState();
+  }
+  if(streakEl)streakEl.textContent=state.streak;
+  document.getElementById('statStreak').textContent=state.streak;
+
+  // current week info
+  let cw=null;
+  WEEK_DATA[state.person].forEach(phase=>phase.weeks.forEach(w=>{
+    if(!cw&&state.weekStatus[w.id]!=='done')cw=w;
+  }));
+  if(weekInfo&&cw)weekInfo.textContent='Current week: '+cw.num+' — '+cw.title;
+}
+
+function renderToday(){
+  const today=new Date().toDateString();
+  const tasks=(state.tasks[today]||[]);
+  const doneTasks=tasks.filter(t=>t.done).length;
+  document.getElementById('todayBadge').textContent=tasks.length-doneTasks;
+
+  const list=document.getElementById('todayTaskList');
+  list.innerHTML='';
+  if(!tasks.length){
+    list.innerHTML='<div style="font-size:13px;color:var(--text3);padding:10px 0;text-align:center">No tasks yet. Add your first task for today!</div>';
+  } else {
+    tasks.forEach((t,i)=>{
+      const div=document.createElement('div');
+      div.className='daily-item';
+      div.innerHTML=`
+        <div class="daily-check ${t.done?'done':''}" onclick="toggleTask('${today}',${i})">${t.done?'✓':''}</div>
+        <div class="daily-label ${t.done?'done':''}">${t.text} <span style="color:var(--text3);font-size:11px">· ${t.subject}</span></div>
+        <div class="daily-time">${t.time}</div>
+        <button onclick="removeTask('${today}',${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px">×</button>`;
+      list.appendChild(div);
+    });
+  }
+
+  // study log
+  const logDiv=document.getElementById('studyLogGrid');
+  const todayLog=state.studyLog[today]||{};
+  logDiv.innerHTML='';
+  const logSubjects=['History','Geography','Polity','Economy','General Science','Bihar Special','Current Affairs','Optional Subject'];
+  logSubjects.forEach(s=>{
+    logDiv.innerHTML+=`<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border2)">
+      <span style="flex:1;font-size:13px;color:var(--text2)">${s}</span>
+      <select class="form-select" id="log_${s.replace(' ','_')}" style="width:100px;padding:4px 8px">
+        <option value="0" ${!todayLog[s]?'selected':''}>0 hr</option>
+        <option value="0.5" ${todayLog[s]==0.5?'selected':''}>30 min</option>
+        <option value="1" ${todayLog[s]==1?'selected':''}>1 hr</option>
+        <option value="1.5" ${todayLog[s]==1.5?'selected':''}>1.5 hrs</option>
+        <option value="2" ${todayLog[s]==2?'selected':''}>2 hrs</option>
+        <option value="3" ${todayLog[s]==3?'selected':''}>3 hrs</option>
+        <option value="4" ${todayLog[s]==4?'selected':''}>4 hrs</option>
+      </select>
+    </div>`;
+  });
+}
+
+function toggleTask(date,idx){
+  if(!state.tasks[date])return;
+  state.tasks[date][idx].done=!state.tasks[date][idx].done;
+  saveState();renderToday();renderDashboard();
+}
+function removeTask(date,idx){
+  state.tasks[date].splice(idx,1);
+  saveState();renderToday();
+}
+function openAddTask(){document.getElementById('taskModal').classList.add('open')}
+function addTask(){
+  const text=document.getElementById('taskInput').value.trim();
+  if(!text){toast('Enter a task description');return}
+  const today=new Date().toDateString();
+  if(!state.tasks[today])state.tasks[today]=[];
+  state.tasks[today].push({id:Date.now(),text,subject:document.getElementById('taskSubject').value,time:document.getElementById('taskTime').value,done:false});
+  document.getElementById('taskInput').value='';
+  saveState();closeModal('taskModal');renderToday();toast('Task added!');
+}
+function saveStudyLog(){
+  const today=new Date().toDateString();
+  if(!state.studyLog[today])state.studyLog[today]={};
+  ['History','Geography','Polity','Economy','General Science','Bihar Special','Current Affairs','Optional Subject'].forEach(s=>{
+    const el=document.getElementById('log_'+s.replace(' ','_'));
+    if(el)state.studyLog[today][s]=parseFloat(el.value)||0;
+  });
+  saveState();toast('Study log saved! ✓');
+}
+
+// ============================================================
+// WEEK PLAN
+// ============================================================
+function renderWeekPlan(){
+  document.getElementById('weekplanPersonLabel').textContent=
+    'Person '+(state.person===1?'1 — B.Sc Botany + M.A. Sociology · Optional: Sociology':'2 — B.Tech CS Engineering · Optional: Computer Science');
+  const container=document.getElementById('weekPlanContainer');
+  container.innerHTML='';
+  WEEK_DATA[state.person].forEach(phase=>{
+    const phDiv=document.createElement('div');
+    phDiv.innerHTML=`<div class="phase-label">${phase.phase}</div>`;
+    phase.weeks.forEach(w=>{
+      const wStatus=state.weekStatus[w.id]||'';
+      const doneTopics=w.topics.filter((_,i)=>state.topicStatus[topicKey(w.id,i)]==='done').length;
+      const pct=Math.round(doneTopics/w.topics.length*100);
+      const el=document.createElement('div');
+      el.className=`week-item${wStatus==='done'?' completed':wStatus==='wip'?' in-progress':''}`;
+      el.id='week_'+w.id;
+      el.innerHTML=`
+        <div class="week-header" onclick="toggleWeekBody('${w.id}')">
+          <span class="week-num-badge">${w.num}</span>
+          <div style="flex:1;min-width:0">
+            <div class="week-title-text">${w.title}</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px">${w.subject} · ${doneTopics}/${w.topics.length} done · ${pct}%</div>
+          </div>
+          <div class="week-status ${wStatus}" onclick="cycleWeekStatus('${w.id}',event)" title="Click to change status">
+            ${wStatus==='done'?'✓':wStatus==='wip'?'…':''}
+          </div>
+          <div class="week-chevron" id="chev_${w.id}">▼</div>
+        </div>
+        <div class="week-body" id="body_${w.id}">
+          <div class="week-topics" id="topics_${w.id}"></div>
+          ${w.pyq?`<div class="pyq-box"><strong>📋 PYQ insight:</strong> ${w.pyq}</div>`:''}
+          ${w.tip?`<div class="tip-box">💡 ${w.tip}</div>`:''}
+          ${w.books?`<div class="books-box"><strong>📚 Books to refer:</strong><br>${w.books}</div>`:''}
+          <div style="margin-top:10px">
+            <div style="font-size:11px;color:var(--text3);margin-bottom:4px">My notes for this week</div>
+            <textarea class="notes-area" id="wnote_${w.id}" placeholder="Add your notes for this week..." style="min-height:60px">${state.notes.find(n=>n.weekId===w.id)?state.notes.find(n=>n.weekId===w.id).content:''}</textarea>
+            <button class="notes-save-btn" onclick="saveWeekNote('${w.id}')">Save note</button>
+          </div>
+        </div>`;
+      phDiv.appendChild(el);
+      container.appendChild(phDiv);
+      renderTopics(w);
+    });
+  });
+}
+
+function renderTopics(w){
+  const topicsDiv=document.getElementById('topics_'+w.id);
+  if(!topicsDiv)return;
+  topicsDiv.innerHTML='';
+  w.topics.forEach((t,i)=>{
+    const key=topicKey(w.id,i);
+    const st=state.topicStatus[key]||'';
+    const row=document.createElement('div');row.className='topic-row';
+    row.innerHTML=`
+      <div class="topic-check ${st}" id="tc_${key}" onclick="cycleTopicStatus('${key}','${w.id}')" title="Click: done → revise → clear">
+        ${st==='done'?'✓':st==='revise'?'↺':''}
+      </div>
+      <div class="topic-text ${st==='done'?'done':''}" id="tt_${key}">${t}</div>
+      <div class="topic-actions">
+        <button class="topic-btn r ${st==='revise'?'active':''}" onclick="markRevise('${key}','${w.id}')">↺ Revise</button>
+        <button class="topic-btn" onclick="openNoteForTopic('${t}','${w.subject}')">+ Note</button>
+      </div>`;
+    topicsDiv.appendChild(row);
+  });
+}
+
+function cycleTopicStatus(key,weekId){
+  const cur=state.topicStatus[key]||'';
+  const next=cur===''?'done':cur==='done'?'revise':'';
+  state.topicStatus[key]=next;
+  saveState();
+  const el=document.getElementById('tc_'+key);
+  const tEl=document.getElementById('tt_'+key);
+  if(el){el.className='topic-check '+(next);el.textContent=next==='done'?'✓':next==='revise'?'↺':'';}
+  if(tEl){tEl.className='topic-text '+(next==='done'?'done':'');}
+  updateWeekProgress(weekId);
+  renderDashboard();
+  updateRevBadges();
+}
+
+function markRevise(key,weekId){
+  state.topicStatus[key]=state.topicStatus[key]==='revise'?'':('revise');
+  saveState();
+  const el=document.getElementById('tc_'+key);
+  if(el){el.className='topic-check '+(state.topicStatus[key]);el.textContent=state.topicStatus[key]==='revise'?'↺':'';}
+  updateWeekProgress(weekId);
+  renderRevision();updateRevBadges();
+}
+
+function updateWeekProgress(weekId){
+  WEEK_DATA[state.person].forEach(phase=>phase.weeks.forEach(w=>{
+    if(w.id===weekId){
+      const d=w.topics.filter((_,i)=>state.topicStatus[topicKey(w.id,i)]==='done').length;
+      const wEl=document.getElementById('week_'+weekId);
+      if(d===w.topics.length&&!state.weekStatus[weekId]){state.weekStatus[weekId]='done';saveState();}
+      renderWeekItemHeader(w,d);
+    }
+  }));
+}
+
+function renderWeekItemHeader(w,doneCount){
+  const wEl=document.getElementById('week_'+w.id);
+  if(!wEl)return;
+  const pct=Math.round(doneCount/w.topics.length*100);
+  const subEl=wEl.querySelector('.week-title-text');
+  if(subEl)subEl.nextElementSibling.textContent=`${w.subject} · ${doneCount}/${w.topics.length} done · ${pct}%`;
+}
+
+function cycleWeekStatus(weekId,e){
+  e.stopPropagation();
+  const cur=state.weekStatus[weekId]||'';
+  const next=cur===''?'wip':cur==='wip'?'done':'';
+  state.weekStatus[weekId]=next;
+  saveState();
+  const wEl=document.getElementById('week_'+weekId);
+  if(wEl){wEl.className=`week-item${next==='done'?' completed':next==='wip'?' in-progress':''}`;
+    const sEl=wEl.querySelector('.week-status');
+    if(sEl){sEl.className=`week-status ${next}`;sEl.textContent=next==='done'?'✓':next==='wip'?'…':'';}
+  }
+  renderDashboard();
+}
+
+function toggleWeekBody(id){
+  const body=document.getElementById('body_'+id);
+  const chev=document.getElementById('chev_'+id);
+  if(body){body.classList.toggle('open');if(chev)chev.classList.toggle('open');}
+}
+function expandAll(){document.querySelectorAll('.week-body').forEach(b=>{b.classList.add('open')});document.querySelectorAll('.week-chevron').forEach(c=>{c.classList.add('open')})}
+function collapseAll(){document.querySelectorAll('.week-body').forEach(b=>{b.classList.remove('open')});document.querySelectorAll('.week-chevron').forEach(c=>{c.classList.remove('open')})}
+
+function saveWeekNote(weekId){
+  const val=document.getElementById('wnote_'+weekId)?.value||'';
+  const existing=state.notes.findIndex(n=>n.weekId===weekId);
+  if(existing>=0){state.notes[existing].content=val;state.notes[existing].date=new Date().toLocaleDateString();}
+  else{state.notes.push({id:Date.now(),weekId,title:'Week note',subject:'General',content:val,date:new Date().toLocaleDateString()});}
+  saveState();toast('Week note saved ✓');
+}
+
+// ============================================================
+// REVISION
+// ============================================================
+function renderRevision(){
+  const pending=[];
+  const done=[];
+  WEEK_DATA[state.person].forEach(phase=>phase.weeks.forEach(w=>{
+    w.topics.forEach((t,i)=>{
+      const key=topicKey(w.id,i);
+      if(state.topicStatus[key]==='revise')pending.push({key,text:t,week:w.num,subject:w.subject});
+    });
+  }));
+  const revDiv=document.getElementById('revisionList');
+  const colors={'History':'#6c63ff','Geography':'#43e97b','Polity':'#ff6584','Economy':'#f7971e','General Science':'#54d2e0','Bihar Special':'#f9a825','Current Affairs':'#ab47bc','Optional Subject':'#26c6da','Mains Writing':'#66bb6a','Mock Test':'#ef5350'};
+  revDiv.innerHTML='';
+  if(!pending.length){revDiv.innerHTML='<div style="font-size:13px;color:var(--text3);padding:12px 0;text-align:center">No topics pending revision. Great job! 🎉</div>';return;}
+  pending.forEach(p=>{
+    const div=document.createElement('div');div.className='rev-item';
+    div.innerHTML=`<div class="rev-dot" style="background:${colors[p.subject]||'#6c63ff'}"></div>
+      <div class="rev-text">${p.text}</div>
+      <div class="rev-week">${p.week}</div>
+      <button class="rev-btn" onclick="markRevisionDone('${p.key}')">✓ Done</button>`;
+    revDiv.appendChild(div);
+  });
+  document.getElementById('revCountBadge').textContent=pending.length+' topics';
+  updateRevBadges();
+}
+
+function markRevisionDone(key){
+  state.topicStatus[key]='done';
+  if(!state.revisionDone)state.revisionDone=[];
+  state.revisionDone.push(key);
+  saveState();renderRevision();renderDashboard();toast('Revision done! Marked as complete ✓');
+}
+
+function updateRevBadges(){
+  let rev=0;
+  allTopics(state.person).forEach(k=>{if(state.topicStatus[k]==='revise')rev++});
+  document.getElementById('revBadge').textContent=rev;
+  document.getElementById('statRevise').textContent=rev;
+}
+
+// ============================================================
+// NOTES
+// ============================================================
+let editNoteId=null;
+function renderNotes(){
+  const div=document.getElementById('notesList');
+  const userNotes=state.notes.filter(n=>!n.weekId);
+  div.innerHTML='';
+  if(!userNotes.length){div.innerHTML='<div style="font-size:13px;color:var(--text3);text-align:center;padding:24px">No notes yet. Click "+ New note" to start.</div>';return;}
+  const colors={'History':'rgba(108,99,255,0.1)','Geography':'rgba(67,233,123,0.08)','Polity':'rgba(255,101,132,0.08)','Economy':'rgba(247,151,30,0.08)','General Science':'rgba(84,210,224,0.08)','Bihar Special':'rgba(249,168,37,0.08)','Current Affairs':'rgba(171,71,188,0.08)','Optional Subject':'rgba(38,198,218,0.08)','General':'rgba(255,255,255,0.04)'};
+  userNotes.slice().reverse().forEach(n=>{
+    div.innerHTML+=`<div class="card" style="background:${colors[n.subject]||colors['General']};cursor:pointer" onclick="editNote(${n.id})">
+      <div class="card-head">
+        <div><div class="card-title">${n.title}</div><div class="card-sub">${n.subject} · ${n.date}</div></div>
+        <span class="badge badge-i">${n.subject}</span>
+      </div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;white-space:pre-wrap">${n.content.substring(0,200)}${n.content.length>200?'...':''}</div>
+    </div>`;
+  });
+}
+
+function openNoteModal(){
+  editNoteId=null;
+  document.getElementById('noteTitle').value='';
+  document.getElementById('noteContent').value='';
+  document.getElementById('noteModalTitle').textContent='New note';
+  document.getElementById('deleteNoteBtn').style.display='none';
+  document.getElementById('noteModal').classList.add('open');
+}
+
+function openNoteForTopic(text,subject){
+  editNoteId=null;
+  document.getElementById('noteTitle').value=text.substring(0,50);
+  document.getElementById('noteContent').value='';
+  document.getElementById('noteSubject').value=subject;
+  document.getElementById('noteModalTitle').textContent='Note for topic';
+  document.getElementById('deleteNoteBtn').style.display='none';
+  document.getElementById('noteModal').classList.add('open');
+}
+
+function editNote(id){
+  const n=state.notes.find(x=>x.id===id);if(!n)return;
+  editNoteId=id;
+  document.getElementById('noteTitle').value=n.title;
+  document.getElementById('noteContent').value=n.content;
+  document.getElementById('noteSubject').value=n.subject;
+  document.getElementById('noteModalTitle').textContent='Edit note';
+  document.getElementById('deleteNoteBtn').style.display='block';
+  document.getElementById('noteModal').classList.add('open');
+}
+
+function saveNote(){
+  const title=document.getElementById('noteTitle').value.trim();
+  const content=document.getElementById('noteContent').value.trim();
+  if(!title||!content){toast('Please fill in title and content');return}
+  if(editNoteId){
+    const n=state.notes.find(x=>x.id===editNoteId);
+    if(n){n.title=title;n.content=content;n.subject=document.getElementById('noteSubject').value;n.date=new Date().toLocaleDateString();}
+  } else {
+    state.notes.push({id:Date.now(),title,subject:document.getElementById('noteSubject').value,content,date:new Date().toLocaleDateString()});
+  }
+  saveState();closeModal('noteModal');renderNotes();toast('Note saved ✓');
+}
+
+function deleteNote(){
+  if(!editNoteId)return;
+  state.notes=state.notes.filter(n=>n.id!==editNoteId);
+  saveState();closeModal('noteModal');renderNotes();toast('Note deleted');
+}
+
+// ============================================================
+// RESOURCES
+// ============================================================
+function renderResources(){
+  const div=document.getElementById('resourcesContainer');
+  div.innerHTML='';
+  RESOURCES[state.person].forEach(r=>{
+    div.innerHTML+=`<div class="res-card">
+      <div class="res-subject">${r.icon} ${r.subject}</div>
+      <div class="res-list">${r.books.map(b=>`📖 ${b}`).join('<br>')}</div>
+      ${r.links.length?`<div style="margin-top:8px">${r.links.map(l=>`<a href="${l}" target="_blank" class="res-link">🔗 ${l}</a>`).join(' ')}</div>`:''}
+    </div>`;
+  });
+}
+
+// ============================================================
+// PYQ
+// ============================================================
+function renderPYQ(){
+  const bars=document.getElementById('pyqBars');
+  bars.innerHTML='';
+  PYQ_DATA.forEach(d=>{
+    bars.innerHTML+=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span style="font-size:12px;color:var(--text2);width:220px;flex-shrink:0">${d.label}</span>
+      <div style="flex:1;height:7px;background:var(--bg3);border-radius:4px;overflow:hidden">
+        <div style="width:${d.pct}%;height:100%;background:${d.color};border-radius:4px"></div>
+      </div>
+      <span class="badge" style="background:rgba(255,255,255,0.05);color:var(--text2);min-width:45px;text-align:right">${d.qs}</span>
+    </div>`;
+  });
+
+  const rt=document.getElementById('repeatedTopics');
+  rt.innerHTML=REPEATED_TOPICS.map(t=>`<div>• ${t}</div>`).join('');
+
+  const dh=document.getElementById('diffHistory');
+  dh.innerHTML='';
+  DIFF_HISTORY.forEach(d=>{
+    dh.innerHTML+=`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2)">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:500;color:var(--text)">${d.exam}</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px">${d.notes}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:11px;font-weight:600;color:${d.col};background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:5px">${d.diff}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px">Good attempts: ${d.attempts}</div>
+      </div>
+    </div>`;
+  });
+}
+
+// ============================================================
+// NAV / PAGES
+// ============================================================
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(id==='revision')renderRevision();
+  if(id==='today')renderToday();
+}
+
+function switchPerson(p){
+  state.person=p;saveState();
+  updatePersonButtons();updateNavPerson();
+  renderDashboard();renderWeekPlan();renderRevision();renderNotes();renderResources();
+  toast('Switched to Person '+(p===1?'1 🌿':'2 💻'));
+}
+
+// ============================================================
+// MODAL / UTILS
+// ============================================================
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function resetConfirm(){document.getElementById('resetModal').classList.add('open')}
+function resetAll(){
+  localStorage.removeItem('bpsc_tracker_v2');
+  location.reload();
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function exportData(){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='bpsc_tracker_backup_'+new Date().toISOString().split('T')[0]+'.json';
+  a.click();toast('Data exported ✓');
+}
+
+function importData(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const imported=JSON.parse(ev.target.result);
+      state={...state,...imported};
+      saveState();
+      document.getElementById('setupOverlay').style.display='none';
+      initApp();toast('Data imported successfully ✓');
+    }catch(err){toast('Invalid file format');}
+  };
+  reader.readAsText(file);
+}
+
+// ============================================================
+// SERVICE WORKER REGISTRATION
+// ============================================================
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+
+// ============================================================
+// BOOT
+// ============================================================
+loadState();
+if(state.setupDone){
+  document.getElementById('setupOverlay').style.display='none';
+  initApp();
+} else {
+  document.getElementById('setupOverlay').style.display='flex';
+}
+</script>
+</body>
+</html>

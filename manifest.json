@@ -1,0 +1,38 @@
+{
+  "name": "BPSC CCE Study Tracker",
+  "short_name": "BPSC Tracker",
+  "description": "Personal preparation planner for BPSC Combined Competitive Exam with week-by-week study plan, progress tracking, notes, and PYQ analysis",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f0f1a",
+  "theme_color": "#1a1a2e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%231a1a2e'/%3E%3Ctext x='96' y='130' font-size='110' text-anchor='middle'%3E📚%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%231a1a2e'/%3E%3Ctext x='256' y='360' font-size='300' text-anchor='middle'%3E📚%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "lang": "en-IN",
+  "shortcuts": [
+    {
+      "name": "Today's Tasks",
+      "short_name": "Today",
+      "description": "View and manage today's study tasks",
+      "url": "./index.html#today"
+    },
+    {
+      "name": "Week Plan",
+      "short_name": "Plan",
+      "description": "View your week-by-week study plan",
+      "url": "./index.html#weekplan"
+    }
+  ]
+}
